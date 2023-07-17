@@ -1,0 +1,96 @@
+const express = require("express")
+const User = require("./model/user")
+const Task = require("./model/task")
+const app = express()
+const port = process.env.PORT || 3000
+require("./db/moongose.js")
+app.use(express.json())
+app.listen(port, () => {
+  console.log("server listening on port " + port)
+})
+
+// create user
+app.post("/users", async(req, res) => {
+    const user = new User(req.body)
+    try {
+        await user.save()
+        res.status(201).send(user)
+    } catch (err) {
+        res.status(400).send(error)
+      }
+  user
+    .save()
+    .then((user) => {
+      console.log(user)
+      res.status(201).send(user)
+    })
+    .catch((error) => {
+      res.status(400).send(error)
+    })
+})
+// read users
+app.get("/users", (req, res) => {
+  User.find({})
+    .then((users) => {
+      console.log(users)
+
+      res.status(201).send(users)
+    })
+    .catch((error) => {
+      res.status(500).send()
+    })
+})
+// read user
+app.get("/users/:id", (req, res) => {
+  const _id = req.params.id
+  User.findById(_id)
+    .then((user) => {
+      console.log(user)
+      if (!user) {
+        res.status(500).send()
+      }
+      res.status(201).send(user)
+    })
+    .catch((error) => {
+      res.status(500).send()
+    })
+})
+// create post
+app.post("/task/add", (req, res) => {
+  const task = new Task(req.body)
+  task
+    .save()
+    .then((task) => {
+      console.log(task)
+      res.status(201).send(task)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.status(400).send(error)
+    })
+})
+// read tasks
+app.get("/tasks", (req, res) => {
+  Task.find({})
+    .then((tasks) => {
+      res.status(201).send(tasks)
+    })
+    .catch((error) => {
+      res.status(500).send()
+    })
+})
+
+//
+app.get("/tasks/:id", (req, res) => {
+  const _id = req.params.id
+  Task.findById(_id)
+    .then((task) => {
+      if (!task) {
+        res.status(500).send()
+      }
+      res.status(201).send(task)
+    })
+    .catch((error) => {
+      res.status(500).send()
+    })
+})
