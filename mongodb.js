@@ -1,7 +1,7 @@
 const mongodb = require("mongodb")
 const MongoClient = mongodb.MongoClient
 
-const connectionURL = "mongodb://127.0.0.1:27017"
+const connectionURL = porcces.env.MONGODB_URL
 const databaseName = "tsk-manager"
 
 MongoClient.connect(
